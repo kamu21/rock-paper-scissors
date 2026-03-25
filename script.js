@@ -3,12 +3,14 @@ let question = 0;
 let correct = 0;
 let cpu = "";
 let target = "";
+let canClick = true;
 
+// 絵文字で表示
 const hands = ["グー", "チョキ", "パー"];
 const handImages = {
-  "グー": "img/rock.png",
-  "チョキ": "img/scissors.png",
-  "パー": "img/paper.png"
+  "グー": "✊",
+  "チョキ": "✌️",
+  "パー": "✋"
 };
 
 function startGame(selectedMode) {
@@ -25,11 +27,17 @@ function startGame(selectedMode) {
 
 function nextRound() {
   if (question >= 10) {
-    // 結果画面へ
     document.getElementById("gameScreen").classList.add("hidden");
     document.getElementById("resultScreen").classList.remove("hidden");
 
-    document.getElementById("finalMessage").innerText = correct >= 9 ? "バッチリです！" : "OKです！";
+    // 評価メッセージ
+    let message = "";
+    if (correct === 10) message = "完璧！！🔥";
+    else if (correct >= 8) message = "すごい！👏";
+    else if (correct >= 5) message = "いい感じ！👍";
+    else message = "がんばろう！💪";
+
+    document.getElementById("finalMessage").innerText = message;
     document.getElementById("finalScore").innerText = `正解数：${correct}/10`;
     return;
   }
@@ -41,8 +49,13 @@ function nextRound() {
   else if (mode === 2) target = "負け";
   else target = Math.random() > 0.5 ? "勝ち" : "負け";
 
-  document.getElementById("cpuHandImg").querySelector("img").src = handImages[cpu];
-  document.getElementById("result").innerText = `第${question}問：${target}を選べ！`;
+  // 絵文字で表示
+  document.getElementById("cpuHandImg").innerText = handImages[cpu];
+
+  document.getElementById("result").innerText =
+    `第${question}問：${target === "勝ち" ? "勝て！" : "負けろ！"}`;
+
+  canClick = true;
 }
 
 function judge(player, cpu) {
@@ -56,25 +69,38 @@ function judge(player, cpu) {
 }
 
 function playerChoice(player) {
-  if (!cpu) return;
+  if (!cpu || !canClick) return;
+  canClick = false;
 
-  const cpuImg = document.getElementById("cpuHandImg").querySelector("img");
   const result = judge(player, cpu);
+
+  if (result === "あいこ") {
+    document.getElementById("result").innerText = "あいこ！もう一回！";
+    setTimeout(() => { canClick = true; }, 500);
+    return;
+  }
 
   if (result === target) {
     correct++;
     document.getElementById("result").innerText = "正解！🎉";
-    document.getElementById("soundCorrect").play();
 
-    // 正解時に光らせるアニメーション
-    cpuImg.classList.add("glow");
-    setTimeout(() => cpuImg.classList.remove("glow"), 600);
+    const sound = document.getElementById("soundCorrect");
+    sound.currentTime = 0;
+    sound.play();
+
+    const cpuDiv = document.getElementById("cpuHandImg");
+    cpuDiv.classList.add("glow");
+    setTimeout(() => cpuDiv.classList.remove("glow"), 600);
   } else {
-    document.getElementById("result").innerText = `不正解！（あなた:${result}）💥`;
-    document.getElementById("soundWrong").play();
+    document.getElementById("result").innerText =
+      `不正解！（あなた:${result}）💥`;
+
+    const sound = document.getElementById("soundWrong");
+    sound.currentTime = 0;
+    sound.play();
   }
 
-  setTimeout(nextRound, 1000);
+  setTimeout(nextRound, 700);
 }
 
 function restartGame() {
