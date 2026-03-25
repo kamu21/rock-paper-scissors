@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>後出しじゃんけん</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- モード選択画面 -->
+<div id="modeScreen">
+  <h1>後出しじゃんけん ✊✌️✋</h1>
+  <div class="mode-buttons">
+    <button onclick="startGame(1)">モード1（勝ちのみ）</button>
+    <button onclick="startGame(2)">モード2（負けのみ）</button>
+    <button onclick="startGame(3)">モード3（ランダム）</button>
+  </div>
+</div>
+
+<!-- じゃんけん画面 -->
+<div id="gameScreen" class="hidden">
+  <div id="cpuHandImg"><img src="" alt="CPU Hand"></div>
+  <div id="result"></div>
+
+  <div class="player-buttons">
+    <button onclick="playerChoice('グー')">✊ グー</button>
+    <button onclick="playerChoice('チョキ')">✌️ チョキ</button>
+    <button onclick="playerChoice('パー')">✋ パー</button>
+  </div>
+</div>
+
+<!-- 結果画面 -->
+<div id="resultScreen" class="hidden">
+  <div id="finalMessage"></div>
+  <div id="finalScore"></div>
+  <button onclick="restartGame()">もう一度遊ぶ</button>
+</div>
+
+<!-- 効果音 -->
+<audio id="soundCorrect" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+<audio id="soundWrong" src="https://actions.google.com/sounds/v1/cartoon/boing.ogg"></audio>
+
+<script src="script.js"></script>
+</body>
+</html>
