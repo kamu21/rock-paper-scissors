@@ -30,7 +30,6 @@ function nextRound() {
     document.getElementById("gameScreen").classList.add("hidden");
     document.getElementById("resultScreen").classList.remove("hidden");
 
-    // 評価メッセージ
     let message = "";
     if (correct === 10) message = "完璧！！🔥";
     else if (correct >= 8) message = "すごい！👏";
@@ -49,7 +48,7 @@ function nextRound() {
   else if (mode === 2) target = "負け";
   else target = Math.random() > 0.5 ? "勝ち" : "負け";
 
-  // 絵文字で表示
+  // 絵文字表示
   document.getElementById("cpuHandImg").innerText = handImages[cpu];
 
   document.getElementById("result").innerText =
@@ -58,6 +57,7 @@ function nextRound() {
   canClick = true;
 }
 
+// 判定
 function judge(player, cpu) {
   if (player === cpu) return "あいこ";
   if (
@@ -68,6 +68,7 @@ function judge(player, cpu) {
   return "負け";
 }
 
+// プレイヤー選択
 function playerChoice(player) {
   if (!cpu || !canClick) return;
   canClick = false;
@@ -91,6 +92,7 @@ function playerChoice(player) {
     const cpuDiv = document.getElementById("cpuHandImg");
     cpuDiv.classList.add("glow");
     setTimeout(() => cpuDiv.classList.remove("glow"), 600);
+
   } else {
     document.getElementById("result").innerText =
       `不正解！（あなた:${result}）💥`;
@@ -103,7 +105,18 @@ function playerChoice(player) {
   setTimeout(nextRound, 700);
 }
 
+// ゲーム再開
 function restartGame() {
   document.getElementById("resultScreen").classList.add("hidden");
   document.getElementById("modeScreen").classList.remove("hidden");
 }
+
+// タッチ端末対応
+const buttons = document.querySelectorAll(".player-buttons button");
+buttons.forEach(btn => {
+  btn.addEventListener("click", e => playerChoice(e.target.dataset.hand));
+  btn.addEventListener("touchstart", e => {
+    e.preventDefault(); // 長押しでも選択防止
+    playerChoice(e.target.dataset.hand);
+  });
+});
