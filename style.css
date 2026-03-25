@@ -20,6 +20,12 @@ button {
   border: none;
   cursor: pointer;
   transition: transform 0.1s, background-color 0.2s;
+
+  -webkit-user-select: none;  /* 選択不可 */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent; /* タップハイライト消す */
 }
 
 .mode-buttons button { width: 80%; max-width: 300px; background-color: #4CAF50; color: white; }
