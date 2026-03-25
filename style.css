@@ -5,7 +5,10 @@ body {
   padding: 10px;
 }
 
-h1 { margin-top: 20px; font-size: 24px; }
+h1 { 
+  margin-top: 20px; 
+  font-size: 24px; 
+}
 
 .hidden { display: none; }
 
@@ -23,37 +26,31 @@ button {
 .player-buttons button { width: 80%; max-width: 250px; background-color: #2196F3; color: white; }
 #resultScreen button { width: 60%; max-width: 200px; background-color: #FF9800; color: white; }
 
-button:active { transform: scale(0.95); background-color: #0b7dda; }
+.mode-buttons button:active { background-color: #3e8e41; transform: scale(0.95); }
+.player-buttons button:active { background-color: #0b7dda; transform: scale(0.95); }
+#resultScreen button:active { background-color: #e68900; transform: scale(0.95); }
 
-#cpuHandImg img {
-  width: 200px;
-  height: 200px;
-  margin: 20px auto;
+#cpuHandImg {
+  font-size: 100px;
+  margin: 20px;
 }
 
 #result { font-size: 20px; margin-top: 15px; min-height: 28px; }
 
-/* 強調結果メッセージ */
 #finalMessage {
-  font-size: 48px;
+  font-size: 10vw;
+  max-font-size: 48px;
   font-weight: bold;
   color: #FF5722;
   margin: 50px 0;
 }
 
-/* 正解数は小さく表示 */
-#finalScore {
-  font-size: 20px;
-  margin-bottom: 30px;
-}
+#finalScore { font-size: 20px; margin-bottom: 30px; }
 
-/* 正解時に光るアニメーション */
 @keyframes glow {
   0% { box-shadow: 0 0 0px #FFD700; }
   50% { box-shadow: 0 0 30px #FFD700; }
   100% { box-shadow: 0 0 0px #FFD700; }
 }
 
-.glow {
-  animation: glow 0.6s ease-in-out;
-}
+.glow { animation: glow 0.6s ease-in-out; }
