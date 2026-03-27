@@ -5,12 +5,36 @@ let cpu = "";
 let target = "";
 let canClick = true;
 
+let audioUnlocked = false;
+
 const hands = ["グー", "チョキ", "パー"];
 const handImages = {
   "グー": "✊",
   "チョキ": "✌️",
   "パー": "✋"
 };
+
+// 🔓 音ロック解除（スマホ対策）
+function unlockAudio() {
+  if (audioUnlocked) return;
+
+  const sounds = [
+    document.getElementById("soundCorrect"),
+    document.getElementById("soundWrong"),
+    document.getElementById("soundClap"),
+    document.getElementById("soundCrowd"),
+    document.getElementById("soundSmallClap")
+  ];
+
+  sounds.forEach(sound => {
+    sound.play().then(() => {
+      sound.pause();
+      sound.currentTime = 0;
+    }).catch(() => {});
+  });
+
+  audioUnlocked = true;
+}
 
 function startGame(selectedMode) {
   mode = selectedMode;
@@ -38,10 +62,44 @@ function nextRound() {
     document.getElementById("finalMessage").innerText = message;
     document.getElementById("finalScore").innerText = `正解数：${correct}/10`;
 
-    // 👏 拍手音
-    const clap = document.getElementById("soundClap");
-    clap.currentTime = 0;
-    clap.play();
+    // 🎉 スコア別歓声
+    if (correct === 10) {
+      // 🔥 超盛り上がり
+      setTimeout(() => {
+        const clap = document.getElementById("soundClap");
+        clap.currentTime = 0;
+        clap.play().catch(() => {});
+      }, 100);
+
+      setTimeout(() => {
+        const crowd = document.getElementById("soundCrowd");
+        crowd.currentTime = 0;
+        crowd.play().catch(() => {});
+      }, 400);
+
+    } else if (correct < 5) {
+      // 😅 しょぼい拍手
+      setTimeout(() => {
+        const small = document.getElementById("soundSmallClap");
+        small.currentTime = 0;
+        small.play().catch(() => {});
+      }, 300);
+
+    } else {
+      // 🙂 普通の拍手＋軽い歓声
+      setTimeout(() => {
+        const clap = document.getElementById("soundClap");
+        clap.currentTime = 0;
+        clap.play().catch(() => {});
+      }, 200);
+
+      setTimeout(() => {
+        const crowd = document.getElementById("soundCrowd");
+        crowd.currentTime = 0;
+        crowd.volume = 0.5; // 少し控えめ
+        crowd.play().catch(() => {});
+      }, 600);
+    }
 
     return;
   }
@@ -56,7 +114,6 @@ function nextRound() {
   const cpuDiv = document.getElementById("cpuHandImg");
   cpuDiv.innerText = handImages[cpu];
 
-  // 👇 CPUアニメ
   cpuDiv.classList.remove("cpu-animate");
   void cpuDiv.offsetWidth;
   cpuDiv.classList.add("cpu-animate");
@@ -118,11 +175,17 @@ function restartGame() {
   document.getElementById("modeScreen").classList.remove("hidden");
 }
 
+// 🎮 ボタンイベント
 const buttons = document.querySelectorAll(".player-buttons button");
 buttons.forEach(btn => {
-  btn.addEventListener("click", e => playerChoice(e.target.dataset.hand));
+  btn.addEventListener("click", e => {
+    unlockAudio();
+    playerChoice(e.target.dataset.hand);
+  });
+
   btn.addEventListener("touchstart", e => {
     e.preventDefault();
+    unlockAudio();
     playerChoice(e.target.dataset.hand);
   });
 });
