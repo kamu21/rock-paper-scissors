@@ -14,20 +14,17 @@ const handImages = {
   "パー": "✋"
 };
 
+// 🔓 音解除
 function unlockAudio() {
   if (audioUnlocked) return;
 
   const sounds = [
     document.getElementById("soundCorrect"),
-    document.getElementById("soundWrong"),
     document.getElementById("soundResult")
   ];
 
   sounds.forEach(s => {
-    s.play().then(() => {
-      s.pause();
-      s.currentTime = 0;
-    }).catch(() => {});
+    s.play().then(() => { s.pause(); s.currentTime = 0; }).catch(() => {});
   });
 
   audioUnlocked = true;
@@ -117,7 +114,7 @@ function playerChoice(player) {
   if (result === target) {
     correct++;
     document.getElementById("result").innerText = "正解！🎉";
-    play("soundCorrect");
+    play("soundCorrect"); // ✅ 正解時のみ correct2.mp3
 
     const cpuDiv = document.getElementById("cpuHandImg");
     cpuDiv.classList.add("glow");
@@ -125,7 +122,7 @@ function playerChoice(player) {
 
   } else {
     document.getElementById("result").innerText = "不正解！💥";
-    play("soundWrong");
+    // 不正解音なし
   }
 
   setTimeout(nextRound, 1000);
