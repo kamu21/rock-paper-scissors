@@ -14,16 +14,13 @@ const handImages = {
   "パー": "✋"
 };
 
-// 🔓 音解除（最重要）
 function unlockAudio() {
   if (audioUnlocked) return;
 
   const sounds = [
     document.getElementById("soundCorrect"),
     document.getElementById("soundWrong"),
-    document.getElementById("soundClap"),
-    document.getElementById("soundCrowd"),
-    document.getElementById("soundSmallClap")
+    document.getElementById("soundResult")
   ];
 
   sounds.forEach(s => {
@@ -37,7 +34,7 @@ function unlockAudio() {
 }
 
 function startGame(selectedMode) {
-  unlockAudio(); // 念押し
+  unlockAudio();
   mode = selectedMode;
   question = 0;
   correct = 0;
@@ -55,23 +52,13 @@ function nextRound() {
 
     document.getElementById("finalScore").innerText = `正解数：${correct}/10`;
 
-    // 🎉 スコア別歓声
+    setTimeout(() => play("soundResult"), 300);
+
     if (correct === 10) {
-      setTimeout(() => play("soundClap"), 100);
-      setTimeout(() => play("soundCrowd"), 400);
       document.getElementById("finalMessage").innerText = "完璧！！🔥";
-
     } else if (correct < 5) {
-      setTimeout(() => play("soundSmallClap"), 300);
       document.getElementById("finalMessage").innerText = "がんばろう！💪";
-
     } else {
-      setTimeout(() => play("soundClap"), 200);
-      setTimeout(() => {
-        const c = document.getElementById("soundCrowd");
-        c.volume = 0.5;
-        play("soundCrowd");
-      }, 600);
       document.getElementById("finalMessage").innerText = "いい感じ！👍";
     }
 
@@ -101,6 +88,7 @@ function nextRound() {
 function play(id) {
   const s = document.getElementById(id);
   s.currentTime = 0;
+  s.volume = 1;
   s.play().catch(() => {});
 }
 
@@ -146,11 +134,13 @@ function playerChoice(player) {
 function restartGame() {
   document.getElementById("resultScreen").classList.add("hidden");
   document.getElementById("modeScreen").classList.remove("hidden");
+  cpu = "";
+  canClick = true;
 }
 
 document.querySelectorAll(".player-buttons button").forEach(btn => {
   btn.addEventListener("click", e => {
     unlockAudio();
-    playerChoice(e.target.dataset.hand);
+    playerChoice(e.currentTarget.dataset.hand);
   });
 });
