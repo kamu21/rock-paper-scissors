@@ -55,9 +55,9 @@ function nextRound() {
     setTimeout(() => play("soundResult"), 300);
 
     if (correct === 10) {
-      document.getElementById("finalMessage").innerText = "完璧！！🔥";
+      document.getElementById("finalMessage").innerText = "完璧です！！🔥";
     } else if (correct < 5) {
-      document.getElementById("finalMessage").innerText = "がんばろう！💪";
+      document.getElementById("finalMessage").innerText = "ナイストライ👍";
     } else {
       document.getElementById("finalMessage").innerText = "いい感じ！👍";
     }
