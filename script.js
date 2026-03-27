@@ -52,7 +52,7 @@ function nextRound() {
 
     document.getElementById("finalScore").innerText = `正解数：${correct}/10`;
 
-    setTimeout(() => play("soundResult"), 300);
+    setTimeout(() => play("soundResult"), 200);
 
     if (correct === 10) {
       document.getElementById("finalMessage").innerText = "完璧です！！🔥";
@@ -128,7 +128,7 @@ function playerChoice(player) {
     play("soundWrong");
   }
 
-  setTimeout(nextRound, 700);
+  setTimeout(nextRound, 1000);
 }
 
 function restartGame() {
