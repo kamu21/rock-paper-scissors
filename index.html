@@ -8,18 +8,15 @@
 </head>
 <body>
 
-<!-- モード選択画面 -->
 <div id="modeScreen">
   <h1>後出しじゃんけん ✊✌️✋</h1>
   <div class="mode-buttons">
-    <!-- 👇 音解除も一緒に実行（超重要） -->
     <button onclick="unlockAudio(); startGame(1)">モード1（勝ちのみ）</button>
     <button onclick="unlockAudio(); startGame(2)">モード2（負けのみ）</button>
     <button onclick="unlockAudio(); startGame(3)">モード3（ランダム）</button>
   </div>
 </div>
 
-<!-- ゲーム画面 -->
 <div id="gameScreen" class="hidden">
   <div id="cpuHandImg"></div>
   <div id="result"></div>
@@ -31,7 +28,6 @@
   </div>
 </div>
 
-<!-- 結果画面 -->
 <div id="resultScreen" class="hidden">
   <div id="finalMessage"></div>
   <div id="finalScore"></div>
@@ -42,10 +38,8 @@
 <audio id="soundCorrect" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
 <audio id="soundWrong" src="https://actions.google.com/sounds/v1/cartoon/boing.ogg"></audio>
 
-<!-- 👇歓声3段階 -->
-<audio id="soundClap" src="https://actions.google.com/sounds/v1/human_voices/applause.ogg"></audio>
-<audio id="soundCrowd" src="https://actions.google.com/sounds/v1/crowds/large_crowd_cheer.ogg"></audio>
-<audio id="soundSmallClap" src="https://actions.google.com/sounds/v1/human_voices/light_applause.ogg"></audio>
+<!-- 🎉 結果音 -->
+<audio id="soundResult" src="result.mp3"></audio>
 
 <script src="script.js"></script>
 </body>
