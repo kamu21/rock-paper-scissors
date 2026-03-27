@@ -14,7 +14,7 @@ const handImages = {
   "パー": "✋"
 };
 
-// 🔓 音ロック解除（スマホ対策）
+// 🔓 音解除（最重要）
 function unlockAudio() {
   if (audioUnlocked) return;
 
@@ -26,10 +26,10 @@ function unlockAudio() {
     document.getElementById("soundSmallClap")
   ];
 
-  sounds.forEach(sound => {
-    sound.play().then(() => {
-      sound.pause();
-      sound.currentTime = 0;
+  sounds.forEach(s => {
+    s.play().then(() => {
+      s.pause();
+      s.currentTime = 0;
     }).catch(() => {});
   });
 
@@ -37,12 +37,12 @@ function unlockAudio() {
 }
 
 function startGame(selectedMode) {
+  unlockAudio(); // 念押し
   mode = selectedMode;
   question = 0;
   correct = 0;
 
   document.getElementById("modeScreen").classList.add("hidden");
-  document.getElementById("resultScreen").classList.add("hidden");
   document.getElementById("gameScreen").classList.remove("hidden");
 
   nextRound();
@@ -53,52 +53,26 @@ function nextRound() {
     document.getElementById("gameScreen").classList.add("hidden");
     document.getElementById("resultScreen").classList.remove("hidden");
 
-    let message = "";
-    if (correct === 10) message = "完璧！！🔥";
-    else if (correct >= 8) message = "すごい！👏";
-    else if (correct >= 5) message = "いい感じ！👍";
-    else message = "がんばろう！💪";
-
-    document.getElementById("finalMessage").innerText = message;
     document.getElementById("finalScore").innerText = `正解数：${correct}/10`;
 
     // 🎉 スコア別歓声
     if (correct === 10) {
-      // 🔥 超盛り上がり
-      setTimeout(() => {
-        const clap = document.getElementById("soundClap");
-        clap.currentTime = 0;
-        clap.play().catch(() => {});
-      }, 100);
-
-      setTimeout(() => {
-        const crowd = document.getElementById("soundCrowd");
-        crowd.currentTime = 0;
-        crowd.play().catch(() => {});
-      }, 400);
+      setTimeout(() => play("soundClap"), 100);
+      setTimeout(() => play("soundCrowd"), 400);
+      document.getElementById("finalMessage").innerText = "完璧！！🔥";
 
     } else if (correct < 5) {
-      // 😅 しょぼい拍手
-      setTimeout(() => {
-        const small = document.getElementById("soundSmallClap");
-        small.currentTime = 0;
-        small.play().catch(() => {});
-      }, 300);
+      setTimeout(() => play("soundSmallClap"), 300);
+      document.getElementById("finalMessage").innerText = "がんばろう！💪";
 
     } else {
-      // 🙂 普通の拍手＋軽い歓声
+      setTimeout(() => play("soundClap"), 200);
       setTimeout(() => {
-        const clap = document.getElementById("soundClap");
-        clap.currentTime = 0;
-        clap.play().catch(() => {});
-      }, 200);
-
-      setTimeout(() => {
-        const crowd = document.getElementById("soundCrowd");
-        crowd.currentTime = 0;
-        crowd.volume = 0.5; // 少し控えめ
-        crowd.play().catch(() => {});
+        const c = document.getElementById("soundCrowd");
+        c.volume = 0.5;
+        play("soundCrowd");
       }, 600);
+      document.getElementById("finalMessage").innerText = "いい感じ！👍";
     }
 
     return;
@@ -124,6 +98,12 @@ function nextRound() {
   canClick = true;
 }
 
+function play(id) {
+  const s = document.getElementById(id);
+  s.currentTime = 0;
+  s.play().catch(() => {});
+}
+
 function judge(player, cpu) {
   if (player === cpu) return "あいこ";
   if (
@@ -141,7 +121,7 @@ function playerChoice(player) {
   const result = judge(player, cpu);
 
   if (result === "あいこ") {
-    document.getElementById("result").innerText = "あいこ！もう一回！";
+    document.getElementById("result").innerText = "あいこ！";
     setTimeout(() => { canClick = true; }, 500);
     return;
   }
@@ -149,22 +129,15 @@ function playerChoice(player) {
   if (result === target) {
     correct++;
     document.getElementById("result").innerText = "正解！🎉";
-
-    const sound = document.getElementById("soundCorrect");
-    sound.currentTime = 0;
-    sound.play();
+    play("soundCorrect");
 
     const cpuDiv = document.getElementById("cpuHandImg");
     cpuDiv.classList.add("glow");
     setTimeout(() => cpuDiv.classList.remove("glow"), 600);
 
   } else {
-    document.getElementById("result").innerText =
-      `不正解！（あなた:${result}）💥`;
-
-    const sound = document.getElementById("soundWrong");
-    sound.currentTime = 0;
-    sound.play();
+    document.getElementById("result").innerText = "不正解！💥";
+    play("soundWrong");
   }
 
   setTimeout(nextRound, 700);
@@ -175,16 +148,8 @@ function restartGame() {
   document.getElementById("modeScreen").classList.remove("hidden");
 }
 
-// 🎮 ボタンイベント
-const buttons = document.querySelectorAll(".player-buttons button");
-buttons.forEach(btn => {
+document.querySelectorAll(".player-buttons button").forEach(btn => {
   btn.addEventListener("click", e => {
-    unlockAudio();
-    playerChoice(e.target.dataset.hand);
-  });
-
-  btn.addEventListener("touchstart", e => {
-    e.preventDefault();
     unlockAudio();
     playerChoice(e.target.dataset.hand);
   });
