@@ -5,7 +5,6 @@ let cpu = "";
 let target = "";
 let canClick = true;
 
-// 絵文字で表示
 const hands = ["グー", "チョキ", "パー"];
 const handImages = {
   "グー": "✊",
@@ -38,6 +37,12 @@ function nextRound() {
 
     document.getElementById("finalMessage").innerText = message;
     document.getElementById("finalScore").innerText = `正解数：${correct}/10`;
+
+    // 👏 拍手音
+    const clap = document.getElementById("soundClap");
+    clap.currentTime = 0;
+    clap.play();
+
     return;
   }
 
@@ -48,8 +53,13 @@ function nextRound() {
   else if (mode === 2) target = "負け";
   else target = Math.random() > 0.5 ? "勝ち" : "負け";
 
-  // 絵文字表示
-  document.getElementById("cpuHandImg").innerText = handImages[cpu];
+  const cpuDiv = document.getElementById("cpuHandImg");
+  cpuDiv.innerText = handImages[cpu];
+
+  // 👇 CPUアニメ
+  cpuDiv.classList.remove("cpu-animate");
+  void cpuDiv.offsetWidth;
+  cpuDiv.classList.add("cpu-animate");
 
   document.getElementById("result").innerText =
     `第${question}問：${target === "勝ち" ? "勝て！" : "負けろ！"}`;
@@ -57,7 +67,6 @@ function nextRound() {
   canClick = true;
 }
 
-// 判定
 function judge(player, cpu) {
   if (player === cpu) return "あいこ";
   if (
@@ -68,7 +77,6 @@ function judge(player, cpu) {
   return "負け";
 }
 
-// プレイヤー選択
 function playerChoice(player) {
   if (!cpu || !canClick) return;
   canClick = false;
@@ -105,18 +113,16 @@ function playerChoice(player) {
   setTimeout(nextRound, 700);
 }
 
-// ゲーム再開
 function restartGame() {
   document.getElementById("resultScreen").classList.add("hidden");
   document.getElementById("modeScreen").classList.remove("hidden");
 }
 
-// タッチ端末対応
 const buttons = document.querySelectorAll(".player-buttons button");
 buttons.forEach(btn => {
   btn.addEventListener("click", e => playerChoice(e.target.dataset.hand));
   btn.addEventListener("touchstart", e => {
-    e.preventDefault(); // 長押しでも選択防止
+    e.preventDefault();
     playerChoice(e.target.dataset.hand);
   });
 });
