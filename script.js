@@ -6,6 +6,7 @@ let target = "";
 let canClick = true;
 
 let audioUnlocked = false;
+let startTime = 0; // ⏱追加
 
 const hands = ["グー", "チョキ", "パー"];
 const handImages = {
@@ -35,6 +36,8 @@ function startGame(selectedMode) {
   question = 0;
   correct = 0;
 
+  startTime = Date.now(); // ⏱開始
+
   document.getElementById("modeScreen").classList.add("hidden");
   document.getElementById("gameScreen").classList.remove("hidden");
 
@@ -49,6 +52,13 @@ function nextRound() {
     const finalMessage = document.getElementById("finalMessage");
 
     document.getElementById("finalScore").innerText = `正解数：${correct}/10`;
+
+    // ⏱時間計算
+    const endTime = Date.now();
+    const timeSec = ((endTime - startTime) / 1000).toFixed(1);
+
+    document.getElementById("finalTime").innerText =
+      `かかった時間：${timeSec}秒`;
 
     setTimeout(() => play("soundResult"), 200);
 
@@ -110,7 +120,6 @@ function playerChoice(player) {
 
   const result = judge(player, cpu);
 
-  // 👇 あいこ改善
   if (result === "あいこ") {
     document.getElementById("result").innerText = "あいこ！もう一度！";
 
