@@ -21,23 +21,32 @@
   <div id="cpuHandImg"></div>
   <div id="result"></div>
 
+  <!-- 👇 ボタンUI変更済み -->
   <div class="player-buttons">
-    <button data-hand="グー">✊ グー</button>
-    <button data-hand="チョキ">✌️ チョキ</button>
-    <button data-hand="パー">✋ パー</button>
+    <button data-hand="グー">
+      <div class="hand-icon">✊</div>
+      <div class="hand-text">グー</div>
+    </button>
+
+    <button data-hand="チョキ">
+      <div class="hand-icon">✌️</div>
+      <div class="hand-text">チョキ</div>
+    </button>
+
+    <button data-hand="パー">
+      <div class="hand-icon">✋</div>
+      <div class="hand-text">パー</div>
+    </button>
   </div>
 </div>
 
 <div id="resultScreen" class="hidden">
   <div id="finalMessage"></div>
   <div id="finalScore"></div>
-  <button onclick="restartGame()">もう一度遊ぶ</button>
+  <button onclick="restartGame()">もう一度トライ</button>
 </div>
 
-<!-- 正解音のみ -->
 <audio id="soundCorrect" src="correct2.mp3"></audio>
-
-<!-- 🎉 結果音（ゲーム終了時） -->
 <audio id="soundResult" src="result.mp3"></audio>
 
 <script src="script.js"></script>
