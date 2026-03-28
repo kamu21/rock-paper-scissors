@@ -14,7 +14,6 @@ const handImages = {
   "パー": "✋"
 };
 
-// 🔓 音解除
 function unlockAudio() {
   if (audioUnlocked) return;
 
@@ -47,17 +46,24 @@ function nextRound() {
     document.getElementById("gameScreen").classList.add("hidden");
     document.getElementById("resultScreen").classList.remove("hidden");
 
+    const finalMessage = document.getElementById("finalMessage");
+
     document.getElementById("finalScore").innerText = `正解数：${correct}/10`;
 
     setTimeout(() => play("soundResult"), 200);
 
     if (correct === 10) {
-      document.getElementById("finalMessage").innerText = "完璧です！！🔥";
+      finalMessage.innerText = "完璧です！！🔥";
+      document.body.classList.add("glow");
     } else if (correct < 5) {
-      document.getElementById("finalMessage").innerText = "ナイストライ👍";
+      finalMessage.innerText = "ナイストライ👍";
     } else {
-      document.getElementById("finalMessage").innerText = "いい感じ！👍";
+      finalMessage.innerText = "いい感じ！👍";
     }
+
+    setTimeout(() => {
+      finalMessage.classList.add("glow");
+    }, 200);
 
     return;
   }
@@ -85,7 +91,6 @@ function nextRound() {
 function play(id) {
   const s = document.getElementById(id);
   s.currentTime = 0;
-  s.volume = 1;
   s.play().catch(() => {});
 }
 
@@ -105,16 +110,21 @@ function playerChoice(player) {
 
   const result = judge(player, cpu);
 
+  // 👇 あいこ改善
   if (result === "あいこ") {
-    document.getElementById("result").innerText = "あいこ！";
-    setTimeout(() => { canClick = true; }, 500);
+    document.getElementById("result").innerText = "あいこ！もう一度！";
+
+    setTimeout(() => {
+      canClick = true;
+    }, 500);
+
     return;
   }
 
   if (result === target) {
     correct++;
     document.getElementById("result").innerText = "正解！🎉";
-    play("soundCorrect"); // ✅ 正解時のみ correct2.mp3
+    play("soundCorrect");
 
     const cpuDiv = document.getElementById("cpuHandImg");
     cpuDiv.classList.add("glow");
@@ -122,7 +132,12 @@ function playerChoice(player) {
 
   } else {
     document.getElementById("result").innerText = "不正解！💥";
-    // 不正解音なし
+
+    const cpuDiv = document.getElementById("cpuHandImg");
+    cpuDiv.style.transform = "scale(0.85)";
+    setTimeout(() => {
+      cpuDiv.style.transform = "scale(1)";
+    }, 120);
   }
 
   setTimeout(nextRound, 1000);
