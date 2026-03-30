@@ -166,13 +166,19 @@ function restartGame() {
 
 // クリックとタッチ両方に対応
 document.querySelectorAll(".player-buttons button").forEach(btn => {
-  // タッチイベント
+  // タッチイベント (touchstart と touchend)
   btn.addEventListener("touchstart", (e) => {
-    e.preventDefault(); // タッチ長押しによるデフォルトメニューを無効化
+    e.preventDefault(); // タッチによる長押しメニューの無効化
   });
 
   // クリックイベント
   btn.addEventListener("click", (e) => {
+    unlockAudio();
+    playerChoice(e.currentTarget.dataset.hand);
+  });
+
+  // touchend イベント (タッチ操作後にボタン反応させる)
+  btn.addEventListener("touchend", (e) => {
     unlockAudio();
     playerChoice(e.currentTarget.dataset.hand);
   });
