@@ -63,12 +63,12 @@ function nextRound() {
     setTimeout(() => play("soundResult"), 200);
 
     if (correct === 10) {
-      finalMessage.innerText = "完璧です！！🔥";
+      finalMessage.innerText = "完璧です！！😄";
       document.body.classList.add("glow");
     } else if (correct < 5) {
       finalMessage.innerText = "ナイストライ👍";
     } else {
-      finalMessage.innerText = "いい感じ！👍";
+      finalMessage.innerText = "いい感じ！😊";
     }
 
     setTimeout(() => {
@@ -98,7 +98,7 @@ function nextRound() {
   cpuDiv.classList.add("cpu-animate");
 
   document.getElementById("result").innerText =
-    `第${question}問：${target === "勝ち" ? "勝て！" : "負けろ！"}`;
+    `第${question}問：${target === "勝ち" ? "勝って！" : "負けて！"}`;
 
   canClick = true;
 }
@@ -126,7 +126,7 @@ function playerChoice(player) {
   const result = judge(player, cpu);
 
   if (result === "あいこ") {
-    document.getElementById("result").innerText = "あいこ！もう一度！";
+    document.getElementById("result").innerText = "あいこ　もう一度！";
 
     setTimeout(() => {
       canClick = true;
@@ -145,7 +145,7 @@ function playerChoice(player) {
     setTimeout(() => cpuDiv.classList.remove("glow"), 600);
 
   } else {
-    document.getElementById("result").innerText = "不正解！💥";
+    document.getElementById("result").innerText = "不正解　💥";
 
     const cpuDiv = document.getElementById("cpuHandImg");
     cpuDiv.style.transform = "scale(0.85)";
