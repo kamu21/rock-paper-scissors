@@ -111,7 +111,7 @@ button:active { transform: scale(0.95); }
 #finalMessage {
   font-size: clamp(36px, 12vw, 72px);
   font-weight: bold;
-  color: #FF5722;
+  color: #4CAF50;
   margin: 50px 0;
 }
 
