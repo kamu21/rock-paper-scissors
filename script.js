@@ -79,7 +79,12 @@ function nextRound() {
   }
 
   question++;
-  cpu = hands[Math.floor(Math.random() * 3)];
+  
+  // 前回のCPUの手と異なる手を選ぶ
+  let previousCpu = cpu; // 前回のCPUの手を記録
+  do {
+    cpu = hands[Math.floor(Math.random() * 3)];
+  } while (cpu === previousCpu); // 前回と同じ手が選ばれた場合、再度選択し直す
 
   if (mode === 1) target = "勝ち";
   else if (mode === 2) target = "負け";
@@ -160,6 +165,12 @@ function restartGame() {
 }
 
 document.querySelectorAll(".player-buttons button").forEach(btn => {
+  // タッチイベントでデフォルト動作を無効化
+  btn.addEventListener("touchstart", (e) => {
+    e.preventDefault(); // デフォルトの長押しメニューを無効化
+  });
+
+  // クリックイベント
   btn.addEventListener("click", e => {
     unlockAudio();
     playerChoice(e.currentTarget.dataset.hand);
