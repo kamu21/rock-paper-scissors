@@ -68,7 +68,7 @@ function nextRound() {
     } else if (correct < 5) {
       finalMessage.innerText = "ナイストライ👍";
     } else {
-      finalMessage.innerText = "いい感じ！😊";
+      finalMessage.innerText = "良い感じです😊";
     }
 
     setTimeout(() => {
