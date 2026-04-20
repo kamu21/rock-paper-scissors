@@ -8,44 +8,43 @@
 </head>
 <body>
 
+<!-- モード選択 -->
 <div id="modeScreen">
   <h1>後出しじゃんけん ✊✌️✋</h1>
+
   <div class="mode-buttons">
-    <button onclick="unlockAudio(); startGame(1)">モード1（勝ちのみ）</button>
-    <button onclick="unlockAudio(); startGame(2)">モード2（負けのみ）</button>
+    <button onclick="unlockAudio(); startGame(1)">モード1（勝ち）</button>
+    <button onclick="unlockAudio(); startGame(2)">モード2（負け）</button>
     <button onclick="unlockAudio(); startGame(3)">モード3（ランダム）</button>
+    <button onclick="unlockAudio(); startGame(4)">モード4（戦略）</button>
   </div>
 </div>
 
+<!-- ゲーム画面 -->
 <div id="gameScreen" class="hidden">
-  <div id="cpuHandImg"></div>
+
+  <div id="cpuHandImg">✊</div>
+
   <div id="result"></div>
 
   <div class="player-buttons">
-    <button data-hand="グー">
-      <div class="hand-icon">✊</div>
-      <div class="hand-text">グー</div>
-    </button>
-
-    <button data-hand="チョキ">
-      <div class="hand-icon">✌️</div>
-      <div class="hand-text">チョキ</div>
-    </button>
-
-    <button data-hand="パー">
-      <div class="hand-icon">✋</div>
-      <div class="hand-text">パー</div>
-    </button>
+    <!-- JSで自動生成 -->
   </div>
+
 </div>
 
+<!-- 結果画面 -->
 <div id="resultScreen" class="hidden">
+
   <div id="finalMessage"></div>
   <div id="finalScore"></div>
-  <div id="finalTime"></div> <!-- ⏱追加 -->
+  <div id="finalTime"></div>
+
   <button onclick="restartGame()">もう一度遊ぶ</button>
+
 </div>
 
+<!-- 音 -->
 <audio id="soundCorrect" src="correct2.mp3"></audio>
 <audio id="soundResult" src="result.mp3"></audio>
 
