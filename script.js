@@ -67,38 +67,21 @@ function setupUI() {
   const container = document.querySelector(".player-buttons");
 
   if (mode === 4) {
-    const buttons = [
-      { type: "win", hand: "winHand" },
-      { type: "draw", hand: "drawHand" }
-    ];
-
-    // 左右ランダム
-    buttons.sort(() => Math.random() - 0.5);
-
-    container.innerHTML = buttons.map(b => `
-      <button data-action="${b.type}">
-        <div class="hand-icon" id="${b.hand}">✊</div>
-        <div class="hand-text"></div>
-      </button>
-    `).join("");
-
-  } else {
     container.innerHTML = `
-      <button data-hand="グー">
-        <div class="hand-icon">✊</div>
-        <div class="hand-text">グー</div>
+      <button data-action="win">
+        <div class="hand-text" id="winHand">グー</div>
       </button>
 
-      <button data-hand="チョキ">
-        <div class="hand-icon">✌️</div>
-        <div class="hand-text">チョキ</div>
-      </button>
-
-      <button data-hand="パー">
-        <div class="hand-icon">✋</div>
-        <div class="hand-text">パー</div>
+      <button data-action="draw">
+        <div class="hand-text" id="drawHand">グー</div>
       </button>
     `;
+  } else {
+    container.innerHTML = hands.map(h => `
+      <button data-hand="${h}">
+        <div class="hand-text">${h}</div>
+      </button>
+    `).join("");
   }
 
   attachButtons();
@@ -109,7 +92,8 @@ function setupUI() {
 ========================= */
 function attachButtons() {
   document.querySelectorAll(".player-buttons button").forEach(btn => {
-    btn.onclick = (e) => {
+
+    const handler = (e) => {
       unlockAudio();
 
       const hand = e.currentTarget.dataset.hand;
@@ -121,6 +105,14 @@ function attachButtons() {
         playerChoice(hand);
       }
     };
+
+    btn.addEventListener("click", handler);
+
+    btn.addEventListener("touchend", (e) => {
+      e.preventDefault();
+      handler(e);
+    }, { passive: false });
+
   });
 }
 
@@ -138,10 +130,8 @@ function nextRound() {
   question++;
 
   const prev = cpu;
-
-  do {
-    cpu = hands[Math.floor(Math.random() * 3)];
-  } while (cpu === prev);
+  const options = hands.filter(h => h !== prev);
+  cpu = options[Math.floor(Math.random() * options.length)];
 
   if (mode === 1) target = "勝ち";
   else if (mode === 2) target = "負け";
@@ -151,7 +141,7 @@ function nextRound() {
   renderCPU();
 
   document.getElementById("result").innerText =
-    `第${question}問：${target === "勝ち" ? "勝って！" : "負けて！"}`;
+    `第${question}問：${target === "勝ち" ? "勝つのはどれ？" : "負けるのはどれ？"}`;
 }
 
 /* =========================
@@ -170,7 +160,7 @@ function renderCPU() {
 }
 
 /* =========================
-   モード4 UI更新（修正済み）
+   モード4 UI更新
 ========================= */
 function updateMode4UI() {
   if (mode !== 4 || !cpu) return;
@@ -186,11 +176,28 @@ function updateMode4UI() {
     "パー": "チョキ"
   };
 
-  // 同じ手
   drawHand.innerText = cpu;
-
-  // 勝つ手
   winHand.innerText = winMap[cpu];
+}
+
+/* =========================
+   🔥 大結果表示
+========================= */
+function showBigResult(text, type) {
+  const el = document.getElementById("bigResult");
+
+  el.innerText = text;
+  el.classList.remove("hidden", "big-correct", "big-wrong");
+
+  if (type === "correct") {
+    el.classList.add("big-correct");
+  } else {
+    el.classList.add("big-wrong");
+  }
+}
+
+function hideBigResult() {
+  document.getElementById("bigResult").classList.add("hidden");
 }
 
 /* =========================
@@ -206,19 +213,22 @@ function playerChoice(player) {
 
   if (result === "あいこ") {
     document.getElementById("result").innerText = "あいこ　もう一度！";
-    setTimeout(() => canClick = true, 400);
+    setTimeout(() => canClick = true, 300);
     return;
   }
 
   if (result === target) {
     correct++;
-    document.getElementById("result").innerText = "正解！🎉";
+    showBigResult("正解です！🎉", "correct");
     play("soundCorrect");
   } else {
-    document.getElementById("result").innerText = "不正解💥";
+    showBigResult("惜しい💥", "wrong");
   }
 
-  setTimeout(nextRound, 800);
+  setTimeout(() => {
+    hideBigResult();
+    nextRound();
+  }, 2000);
 }
 
 /* =========================
@@ -232,12 +242,13 @@ function handleMode4(action) {
 
   if (action === "draw") {
     player = cpu;
-  }
-
-  if (action === "win") {
-    if (cpu === "グー") player = "パー";
-    if (cpu === "チョキ") player = "グー";
-    if (cpu === "パー") player = "チョキ";
+  } else if (action === "win") {
+    const winMap = {
+      "グー": "パー",
+      "チョキ": "グー",
+      "パー": "チョキ"
+    };
+    player = winMap[cpu];
   }
 
   const result = judge(player, cpu);
@@ -250,13 +261,16 @@ function handleMode4(action) {
 
   if (result === "勝ち") {
     correct++;
-    document.getElementById("result").innerText = "正解！🎉";
+    showBigResult("正解です！🎉", "correct");
     play("soundCorrect");
   } else {
-    document.getElementById("result").innerText = "不正解💥";
+    showBigResult("惜しい💥", "wrong");
   }
 
-  setTimeout(nextRound, 800);
+  setTimeout(() => {
+    hideBigResult();
+    nextRound();
+  }, 2000);
 }
 
 /* =========================
