@@ -106,12 +106,11 @@ function attachButtons() {
       }
     };
 
-btn.addEventListener("pointerdown", (e) => {
-  e.preventDefault();
-  if (!canClick) return;
-  handler(e);
-});
-});
+　　btn.addEventListener("pointerdown", (e) => {
+  　　e.preventDefault();
+  　　if (!canClick) return;
+  　　handler(e);
+　　});
 
   });
 }
