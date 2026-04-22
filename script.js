@@ -337,3 +337,8 @@ function restartGame() {
   correct = 0;
   canClick = true;
 }
+
+// 右クリック・長押しメニュー完全禁止
+document.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+});
