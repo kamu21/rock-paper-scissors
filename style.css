@@ -49,6 +49,8 @@ button {
 
   touch-action: manipulation; /* ★タブレット長押し対策 */
 
+  -webkit-touch-callout: none;
+
   transition: 0.1s;
 }
 
