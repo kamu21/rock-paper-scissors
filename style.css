@@ -199,3 +199,10 @@ button:active {
 .hidden {
   display: none;
 }
+
+html, body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
