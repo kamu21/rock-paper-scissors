@@ -106,7 +106,7 @@ function attachButtons() {
       }
     };
 
-   btn.addEventListener("pointerup", (e) => {
+   btn.addEventListener("pointerdown", (e) => {
    　e.preventDefault();
  　  handler(e);
 });
