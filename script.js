@@ -106,12 +106,10 @@ function attachButtons() {
       }
     };
 
-    btn.addEventListener("click", handler);
-
-    btn.addEventListener("touchend", (e) => {
-      e.preventDefault();
-      handler(e);
-    }, { passive: false });
+   btn.addEventListener("pointerup", (e) => {
+   　e.preventDefault();
+ 　  handler(e);
+});
 
   });
 }
