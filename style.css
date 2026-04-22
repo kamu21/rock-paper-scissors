@@ -32,15 +32,23 @@ h1 {
   }
 }
 
-/* ボタン共通 */
+/* =========================
+   ボタン共通（★ここだけ強化）
+========================= */
 button {
   margin: 10px;
   padding: 18px;
   border-radius: 12px;
   border: none;
   cursor: pointer;
+
   user-select: none;
+  -webkit-user-select: none;
+
   -webkit-tap-highlight-color: transparent;
+
+  touch-action: manipulation; /* ★タブレット長押し対策 */
+
   transition: 0.1s;
 }
 
@@ -57,7 +65,9 @@ button:active {
   font-size: 18px;
 }
 
-/* プレイヤーボタン */
+/* =========================
+   プレイヤーボタン
+========================= */
 .player-buttons {
   display: flex;
   justify-content: center;
@@ -78,14 +88,17 @@ button:active {
   overflow: hidden;
 }
 
-.hand-icon {
-  font-size: 40px;
+/* ★追加：テキストのみでもズレないように */
+.player-buttons .hand-text {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 0; /* 絵なしでも崩れない */
 }
 
-.hand-text {
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 5px;
+/* 旧アイコン（モード4用に残す） */
+.hand-icon {
+  font-size: 40px;
+  display: none; /* ★今は使わないので非表示でもOK */
 }
 
 /* CPU */
@@ -124,4 +137,63 @@ button:active {
 
 .cpu-animate {
   animation: cpuPop 0.25s;
+}
+
+/* =========================
+   大結果表示（見やすさ重視）
+========================= */
+#bigResult {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-size: 4.5rem;
+  font-weight: bold;
+  z-index: 9999;
+
+  /* ★横1行にする */
+  white-space: nowrap;
+
+  /* ★中央揃え */
+  text-align: center;
+
+  /* ★見やすさ補強 */
+  padding: 10px 20px;
+  border-radius: 12px;
+
+  pointer-events: none;
+
+  animation: popResult 0.2s ease-out;
+}
+
+/* 出現アニメーション */
+@keyframes popResult {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ★正解（緑） */
+.big-correct {
+  color: #00c853;
+  text-shadow: 0 0 10px #00c853;
+  background: rgba(0, 200, 83, 0.08);
+}
+
+/* ★不正解（赤） */
+.big-wrong {
+  color: #ff1744;
+  text-shadow: 0 0 10px #ff1744;
+  background: rgba(255, 23, 68, 0.08);
+}
+
+/* 非表示 */
+.hidden {
+  display: none;
 }
