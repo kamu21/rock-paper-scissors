@@ -140,7 +140,7 @@ function nextRound() {
   renderCPU();
 
   document.getElementById("result").innerText =
-    `第${question}問：${target === "勝ち" ? "勝つのはどれ？" : "負けるのはどれ？"}`;
+    `第${question}問：${target === "勝ち" ? "勝つのは？" : "負けるのは？"}`;
 }
 
 /* =========================
