@@ -211,23 +211,49 @@ function playerChoice(player) {
   const result = judge(player, cpu);
 
   if (result === "あいこ") {
-    document.getElementById("result").innerText = "あいこ　もう一度！";
+    document.getElementById("result").innerText =
+      "あいこ　もう一度！";
+
     setTimeout(() => canClick = true, 300);
     return;
   }
 
   if (result === target) {
+
+    // 正解
     correct++;
+
     showBigResult("正解です！🎉", "correct");
     play("soundCorrect");
-  } else {
-    showBigResult("惜しい💥", "wrong");
-  }
 
-  setTimeout(() => {
-    hideBigResult();
-    nextRound();
-  }, 2000);
+    setTimeout(() => {
+      hideBigResult();
+      nextRound();
+    }, 2000);
+
+  } else {
+
+    // 不正解
+    showBigResult("惜しい💥", "wrong");
+
+    if (mode === 1) {
+
+      // モード1は正解するまで同じ問題
+      setTimeout(() => {
+        hideBigResult();
+        canClick = true;
+      }, 2000);
+
+      return;
+    }
+
+    // モード2・3は従来どおり
+    setTimeout(() => {
+      hideBigResult();
+      nextRound();
+    }, 2000);
+
+  }
 }
 
 /* =========================
@@ -341,4 +367,46 @@ function restartGame() {
 // 右クリック・長押しメニュー完全禁止
 document.addEventListener("contextmenu", (e) => {
   e.preventDefault();
+});
+
+/* =========================
+   全画面表示
+========================= */
+async function toggleFullscreen() {
+
+  try {
+
+    if (!document.fullscreenElement) {
+
+      if (document.documentElement.requestFullscreen) {
+        await document.documentElement.requestFullscreen();
+      } else {
+        alert("このブラウザは全画面表示に対応していません。");
+      }
+
+    } else {
+
+      await document.exitFullscreen();
+
+    }
+
+  } catch (e) {
+    alert("全画面表示にできませんでした。");
+  }
+
+}
+
+// 全画面状態に合わせてボタン表示を変更
+document.addEventListener("fullscreenchange", () => {
+
+  const btn = document.querySelector(".fullscreen-button");
+
+  if (!btn) return;
+
+  if (document.fullscreenElement) {
+    btn.innerText = "全画面解除 ↙";
+  } else {
+    btn.innerText = "全画面表示 ⛶";
+  }
+
 });
