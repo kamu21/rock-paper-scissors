@@ -206,3 +206,15 @@ html, body {
   user-select: none;
   touch-action: manipulation;
 }
+/* =========================
+   全画面表示ボタン
+========================= */
+.fullscreen-button {
+  width: 80%;
+  max-width: 300px;
+  background: #607D8B;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 25px;
+}
