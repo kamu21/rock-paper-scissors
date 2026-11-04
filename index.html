@@ -17,6 +17,10 @@
     <button onclick="unlockAudio(); startGame(2)">モード2（負け）</button>
     <button onclick="unlockAudio(); startGame(3)">モード3（ランダム）</button>
     <button onclick="unlockAudio(); startGame(4)">モード4（応用）</button>
+
+    <button class="fullscreen-button" onclick="toggleFullscreen()">
+      全画面表示 ⛶
+    </button>
   </div>
 </div>
 
@@ -24,12 +28,8 @@
 <div id="gameScreen" class="hidden">
 
   <div id="cpuHandImg">✊</div>
-
   <div id="result"></div>
-
   <div class="player-buttons"></div>
-
-  <!-- 🔥 追加：大結果表示 -->
   <div id="bigResult" class="hidden"></div>
 
 </div>
